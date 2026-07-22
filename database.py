@@ -17,6 +17,10 @@ class DBHelper:
         inserted_id = self.collection.insert_one(document)
         print(' [DBHelper] Document Saved. ID is:',inserted_id)
     
+    def save_many(self,document):
+        inserted_id = self.collection.insert_many(document)
+        print(' [DBHelper] Documents Saved. ID is:',inserted_id)
+    
     def retrieve(self,condition = None):
         if condition is None:
             condition = {}
