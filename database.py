@@ -1,12 +1,15 @@
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
-from config import MONGODB_URI
+from config import MONGODB_URI,DB_NAME
 import json
+mongo_client = MongoClient(MONGODB_URI, server_api=ServerApi('1'))
+db = mongo_client[DB_NAME]
+tasks_collection = db['tasks']
+contacts_collection = db['contacts']
 class DBHelper:
     
     def __init__(self,db_name='jai2026'):
-        uri = MONGODB_URI
-        self.client = MongoClient(uri, server_api=ServerApi('1'))
+        self.client = mongo_client
         self.db = self.client[db_name]
         print(' [DBHelper] Connection Created')
         
@@ -21,13 +24,12 @@ class DBHelper:
     def save_many(self,document):
         inserted_id = self.collection.insert_many(document)
         print(' [DBHelper] Documents Saved. ID is:',inserted_id)
+    
     def retrieve(self,condition = None):
         if condition is None:
             condition = {}
         result = list(self.collection.find(condition))
         print(' [DBHelper] Documents Retrieved. Result is:',result)
-        # for document in result:
-        #     print(document)
         return result
             
     def update(self,condition=None,document_to_update = None):
@@ -38,12 +40,12 @@ class DBHelper:
             }
         )
         return result
-        # print(' [DBHelper] Documents Updated',result)
         
     def delete(self,condition):
         result = self.collection.delete_one(condition)
         print(' [DBHelper] Documents Deleted',result)
         return result
+
 def save_contacts():
     file = open('contacts.json','r')
     contacts = file.read()
