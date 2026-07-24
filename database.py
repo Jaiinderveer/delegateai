@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 from config import MONGODB_URI
+import json
 class DBHelper:
     
     def __init__(self,db_name='jai2026'):
@@ -20,7 +21,6 @@ class DBHelper:
     def save_many(self,document):
         inserted_id = self.collection.insert_many(document)
         print(' [DBHelper] Documents Saved. ID is:',inserted_id)
-    
     def retrieve(self,condition = None):
         if condition is None:
             condition = {}
@@ -44,3 +44,12 @@ class DBHelper:
         result = self.collection.delete_one(condition)
         print(' [DBHelper] Documents Deleted',result)
         return result
+def save_contacts():
+    file = open('contacts.json','r')
+    contacts = file.read()
+    contacts_dictionary = json.loads(contacts)
+    print(contacts_dictionary,type(contacts_dictionary))
+    contacts_to_save = contacts_dictionary['contacts']
+    db = DBHelper()
+    db.select_collection('contacts')
+    db.save_many(contacts_to_save)
