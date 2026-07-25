@@ -39,7 +39,6 @@ def list_tasks():
             f"Description: {task['description']}\n\n"
             f"Action: {task['action']}\n\n"
             f"Contact: {task['contact_name']}\n\n"
-            f"Phone: {task['contact_phone']}\n\n"
             f"Status: {task['status']}\n\n"
             f"Created At: {task['created_at']}\n\n"
             f"\n{'='*45}\n\n"
@@ -51,7 +50,7 @@ def update_task(title,
                 description=None,
                 action=None,
                 contact_name=None,
-                contact_phone=None):
+                ):
 
     condition = {
         "title": title
@@ -67,9 +66,6 @@ def update_task(title,
 
     if contact_name:
         updated_document["contact_name"] = contact_name
-
-    if contact_phone:
-        updated_document["contact_phone"] = contact_phone
 
     result = db_helper.update(condition, updated_document)
 
@@ -205,8 +201,7 @@ def agentic_save(input_list):
     title=arguments["title"],
     description=arguments.get("description"),
     action=arguments.get("action"),
-    contact_name=arguments.get("contact_name"),
-    contact_phone=arguments.get("contact_phone")
+    contact_name=arguments.get("contact_name")
     )
 
         elif function_name == "delete_task":
